@@ -15,6 +15,21 @@ public:
     }
     int minPathSum(vector<vector<int>>& grid) {
         vector<vector<int>> dp(grid.size(),vector<int>(grid[0].size(),-1));
-        return f(grid,grid.size()-1,grid[0].size()-1,dp);
+        dp[0][0]=grid[0][0];
+        for(int row=0;row<grid.size();row++){
+            for(int col=0;col<grid[0].size();col++){
+                if(row==0 && col==0) continue;
+                int above = INT_MAX;
+                int left = INT_MAX;
+                if(row>0){
+                    above = grid[row][col]+dp[row-1][col];
+                }
+                if(col>0){
+                    left = grid[row][col]+dp[row][col-1];
+                }
+                dp[row][col] = min(above,left);
+            }
+        }
+        return dp[grid.size()-1][grid[0].size()-1];
     }
 };
