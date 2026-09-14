@@ -14,22 +14,25 @@ public:
         return dp[row][col]=min(above,left);
     }
     int minPathSum(vector<vector<int>>& grid) {
-        vector<vector<int>> dp(grid.size(),vector<int>(grid[0].size(),-1));
-        dp[0][0]=grid[0][0];
+        vector<int>prev(grid[0].size(),0);
         for(int row=0;row<grid.size();row++){
             for(int col=0;col<grid[0].size();col++){
-                if(row==0 && col==0) continue;
-                int above = INT_MAX;
-                int left = INT_MAX;
-                if(row>0){
-                    above = grid[row][col]+dp[row-1][col];
+                if(row==0 && col==0) {
+                    prev[col] = grid[row][col];
+                    continue;
                 }
-                if(col>0){
-                    left = grid[row][col]+dp[row][col-1];
+                if(row==0){
+                    prev[col] = grid[row][col]+prev[col-1];
+                    continue;
                 }
-                dp[row][col] = min(above,left);
+                if(col==0){
+                    prev[col] = grid[row][col] + prev[col];
+                }
+                else{
+                    prev[col]=grid[row][col] + min(prev[col],prev[col-1]);
+                }
             }
         }
-        return dp[grid.size()-1][grid[0].size()-1];
+        return prev[grid[0].size()-1];
     }
 };
