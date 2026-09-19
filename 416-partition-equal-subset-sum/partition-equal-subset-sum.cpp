@@ -18,7 +18,19 @@ public:
         }
         if(sum%2!=0) return false;
         int total = sum / 2;
-        vector<vector<int>> dp(nums.size(),vector<int>(total+1,-1));
-        return f(nums.size()-1,nums,total,dp);
+        vector<vector<bool>> dp(nums.size(),vector<bool>(total+1,0));
+        for(int i=0;i<nums.size();i++) dp[i][0] = true;
+        if(nums[0]<=total) dp[0][nums[0]]=true;
+        for(int i=1;i<nums.size();i++){
+            for(int target =1;target<=total;target++){
+                        bool notTake = dp[i-1][target];
+                        bool take = false;
+                            if(nums[i]<=target){
+                            take = dp[i-1][target-nums[i]];
+                            }
+                        dp[i][target]=take || notTake;
+            }
+        }
+        return dp[nums.size()-1][total];
     }
 };
